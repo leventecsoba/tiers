@@ -1,21 +1,86 @@
+:root {
+    --primary-color: rgb(30, 30, 30);
+    --secondary-color: rgb(40, 40, 40);
+    --ternary-color: rgb(50, 50, 50)
+}
+
+
 * {
     padding: 0;
     margin: 0;
 }
 
-#container {
+html {
+    overflow: hidden;
+}
+
+main {
     height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    background-color: var(--primary-color);
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--primary-color);
+}
+
+#button-container {
+    width: 100%;
+    padding: 2rem;
+    display: flex;
     gap: 1rem;
-    background-color: rgb(30, 30, 30);
+    align-items: center;
+    justify-content: center;
+}
+
+#add-button-container {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#add-button-svg {
+    height: 2rem;
+    width: 2rem;
+    transition: height .2s ease-out, width .2s ease-out;
+}
+
+#add-button-svg:hover {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.image-button-container {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+}
+
+.image-button {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 0.5rem;
+    transition: height .2s ease-out, width .2s ease-out;
+}
+
+.image-button:hover {
+    height: 2.5rem;
+    width: 2.5rem;
 }
 
 .tier-row {
     display: flex;
-    gap: 1rem;
-    background-color: rgb(40, 40, 40);
+    background-color: var(--secondary-color);
 }
 
 .tier-level {
@@ -32,4 +97,50 @@
     font-size: 3rem;
     font-weight: 700;
     color: black;
+}
+
+.tier-content {
+    display: flex;
+    flex-grow: 1;
+}
+
+#tier-content-placeholder {
+    height: 10rem;
+    width: 10rem;
+    background: var(--ternary-color);
+}
+
+.tier-content-item {
+    height: 10rem;
+    width: 10rem;
+}
+
+#dragged {
+    height: 10rem;
+    width: 10rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#dragged-img {
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    animation: dragged_animation .3s ease-out;
+}
+
+@keyframes dragged_animation {
+    0% {
+        height: 0;
+        width: 0;
+    }
+
+    100% {
+        height: 100%;
+        width: 100%;
+    }
 }

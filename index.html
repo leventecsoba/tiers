@@ -2,22 +2,64 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tiers</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiers</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="container">
-    <div class="tier-row">
-      <div class="tier-level" style="background-color: #fe7f7f;">
-        <span>S</span>
-      </div>
-      <div class="tier-content"></div>
+<main id="draggable-container">
+    <div id="container">
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #fe7f7f;">
+                <span>S</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #FFBF7F;">
+                <span>A</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #FEDF81;">
+                <span>B</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #FEFE7F;">
+                <span>C</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #BEFF7E;">
+                <span>D</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
+        <div class="tier-row">
+            <div class="tier-level" style="background-color: #7EFE7F;">
+                <span>E</span>
+            </div>
+            <div class="tier-content"></div>
+        </div>
     </div>
-  </div>
-  <script src="./dist/main.js" defer></script>
+    <div id="button-container">
+        <input id="add-button-input" hidden type="file" multiple />
+        <label id="add-button-container" for="add-button-input">
+            <svg id="add-button-svg" width="32" height="32" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+                <rect width="128" height="128" rx="32" ry="32" fill="transparent" stroke="white" stroke-width="4"/>
+                <line x1="64" y1="32" x2="64" y2="96" stroke="white" stroke-width="4"/>
+                <line x1="32" y1="64" x2="96" y2="64" stroke="white" stroke-width="4"/>
+            </svg>
+        </label>
+    </div>
+</main>
+<script src="./dist/main.js" defer></script>
 </body>
 
 </html>
