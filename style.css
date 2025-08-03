@@ -1,34 +1,25 @@
 :root {
     --primary-color: rgb(30, 30, 30);
     --secondary-color: rgb(40, 40, 40);
-    --ternary-color: rgb(50, 50, 50)
+    --ternary-color: rgb(50, 50, 50);
+    --highlight-color: rgb(150, 150 , 150);
 }
 
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 html {
-    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--secondary-color);
 }
 
 main {
     height: 100vh;
     width: 100vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background-color: var(--primary-color);
-}
-
-#container {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--primary-color);
-    overflow-y: scroll;
 }
 
 #button-container {
@@ -40,31 +31,10 @@ main {
     justify-content: center;
     position: fixed;
     bottom: 0;
-    background: linear-gradient(180deg, transparent 0%, var(--primary-color) 100%);
+    left: 0;
 }
 
-#add-button-container {
-    height: 5rem;
-    width: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#add-button-svg {
-    height: 4rem;
-    width: 4rem;
-    border: 1px solid white;
-    border-radius: 0.5rem;
-    transition: height .2s ease-out, width .2s ease-out;
-}
-
-#add-button-svg:hover {
-    height: 5rem;
-    width: 5rem;
-}
-
-.image-button-container {
+.button-wrapper {
     height: 5rem;
     width: 5rem;
     display: flex;
@@ -73,21 +43,25 @@ main {
     cursor: grab;
 }
 
-.image-button {
+.button-content {
     height: 4rem;
     width: 4rem;
-    border: 1px solid white;
     border-radius: 0.5rem;
     transition: height .2s ease-out, width .2s ease-out;
 }
 
-.image-button:hover {
+.button-content:hover {
     height: 5rem;
     width: 5rem;
 }
 
-.tier-row {
+#tier-container {
+    height: 100%;
     width: 100%;
+    background-color: var(--primary-color);
+}
+
+.tier-row {
     display: flex;
     background-color: var(--secondary-color);
 }
@@ -110,7 +84,7 @@ main {
 
 .tier-content {
     display: flex;
-    flex-grow: 1;
+    flex: 1;
 }
 
 #tier-content-placeholder {
@@ -152,4 +126,15 @@ main {
         height: 100%;
         width: 100%;
     }
+}
+
+#add-button-label {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--highlight-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    cursor: pointer;
 }

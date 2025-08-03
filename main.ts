@@ -36,36 +36,37 @@ const initTestFile = () => {
 }
 
 const initImageButton = (file: File): HTMLDivElement => {
-    const container = document.createElement("div")
-    container.classList.add("image-button-container")
-    container.draggable = false
+    const objectURL = URL.createObjectURL(file)
 
-    container.addEventListener("drag", (e) => {
+    const buttonWrapper = document.createElement("div")
+    buttonWrapper.classList.add("button-wrapper")
+    buttonWrapper.draggable = false
+
+    buttonWrapper.addEventListener("drag", (e) => {
         e.preventDefault()
         e.stopPropagation()
     })
 
-    container.addEventListener("mousedown", () => {
+    buttonWrapper.addEventListener("mousedown", () => {
         isDragging = true
-        draggedElementObjectURL = URL.createObjectURL(file)
+        draggedElementObjectURL = objectURL
     })
 
-    const div = document.createElement("div")
-    const backgroundImageObjectURL = URL.createObjectURL(file)
-    div.style.background = `url(${backgroundImageObjectURL}) center center / contain no-repeat var(--ternary-color)`
-    div.classList.add("image-button")
-    div.draggable = false
+    const buttonContent = document.createElement("div")
+    buttonContent.style.background = `url(${objectURL}) center center / contain no-repeat var(--ternary-color)`
+    buttonContent.classList.add("button-content")
+    buttonContent.draggable = false
 
-    div.addEventListener("drag", (e) => {
+    buttonContent.addEventListener("drag", (e) => {
         e.preventDefault()
         e.stopPropagation()
     })
 
-    container.appendChild(div)
-    return container
+    buttonWrapper.appendChild(buttonContent)
+    return buttonWrapper
 }
 
-const createDraggableElement = (objectURL: string, initialXPosition: number, initialYPosition: number) => {
+const createDraggedElement = (objectURL: string, initialXPosition: number, initialYPosition: number) => {
     const dragged = document.createElement("div")
     dragged.setAttribute("id", "dragged")
     dragged.style.left = `calc(${initialXPosition}px - 5rem)`
@@ -104,6 +105,17 @@ const createTierContentItem = (tierContent: Element, objectURL: string) => {
     const tierContentItem = document.createElement("div")
     tierContentItem.classList.add("tier-content-item")
     tierContentItem.style.background = `url(${objectURL}) center center / contain no-repeat var(--ternary-color)`
+    tierContentItem.draggable = false
+
+    tierContentItem.addEventListener("drag", (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+    })
+
+    tierContentItem.addEventListener("mousedown", () => {
+        isDragging = true
+        draggedElementObjectURL = objectURL
+    })
 
     const placeholder = [...tierContent.children].find((e) => e.id === "tier-content-placeholder")
     if (!placeholder) {
@@ -130,7 +142,6 @@ const resetDraggingProperties = () => {
 const initDragging = () => {
     window.addEventListener("mouseup", () => {
         if (!isDragging) {
-            resetDraggingProperties()
             return
         }
 
@@ -144,7 +155,7 @@ const initDragging = () => {
         if (draggedElementObjectURL) {
             createTierContentItem(tierContent, draggedElementObjectURL)
         } else {
-            destroyTierContentPlaceholder(tierContent)
+            tierContent.removeChild(tierContentPlaceholder)
         }
 
         resetDraggingProperties()
@@ -156,7 +167,7 @@ const initDragging = () => {
         }
         const draggedElement = document.getElementById("dragged")
         if (!draggedElement) {
-            createDraggableElement(draggedElementObjectURL, e.clientX, e.clientY)
+            createDraggedElement(draggedElementObjectURL, e.clientX, e.clientY)
             return
         }
         draggedElement.style.left = `calc(${e.clientX}px - 5rem)`
