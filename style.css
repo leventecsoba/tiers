@@ -4,7 +4,6 @@
     --ternary-color: rgb(50, 50, 50)
 }
 
-
 * {
     padding: 0;
     margin: 0;
@@ -24,42 +23,50 @@ main {
 }
 
 #container {
+    height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     background-color: var(--primary-color);
+    overflow-y: scroll;
 }
 
 #button-container {
     width: 100%;
-    padding: 2rem;
+    padding: 2rem 0;
     display: flex;
     gap: 1rem;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--primary-color) 100%);
 }
 
 #add-button-container {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 5rem;
+    width: 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 #add-button-svg {
-    height: 2rem;
-    width: 2rem;
+    height: 4rem;
+    width: 4rem;
+    border: 1px solid white;
+    border-radius: 0.5rem;
     transition: height .2s ease-out, width .2s ease-out;
 }
 
 #add-button-svg:hover {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 5rem;
+    width: 5rem;
 }
 
 .image-button-container {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 5rem;
+    width: 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,25 +74,27 @@ main {
 }
 
 .image-button {
-    height: 2rem;
-    width: 2rem;
+    height: 4rem;
+    width: 4rem;
+    border: 1px solid white;
     border-radius: 0.5rem;
     transition: height .2s ease-out, width .2s ease-out;
 }
 
 .image-button:hover {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 5rem;
+    width: 5rem;
 }
 
 .tier-row {
+    width: 100%;
     display: flex;
     background-color: var(--secondary-color);
 }
 
 .tier-level {
-    height: 10rem;
-    width: 10rem;
+    height: 8rem;
+    width: 8rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -105,19 +114,19 @@ main {
 }
 
 #tier-content-placeholder {
-    height: 10rem;
-    width: 10rem;
+    height: 8rem;
+    width: 8rem;
     background: var(--ternary-color);
 }
 
 .tier-content-item {
-    height: 10rem;
-    width: 10rem;
+    height: 8rem;
+    width: 8rem;
 }
 
 #dragged {
-    height: 10rem;
-    width: 10rem;
+    height: 8rem;
+    width: 8rem;
     position: absolute;
     left: 0;
     top: 0;
