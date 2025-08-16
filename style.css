@@ -252,61 +252,43 @@ main {
 }
 
 .modal-content {
-    height: 35rem;
     width: 50rem;
+    padding: 2rem 1rem;
     border-radius: 1rem;
     background-color: var(--ternary-color);
     display: flex;
     flex-direction: column;
+    gap: 2rem;
     position: relative;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 3rem;
-
-    & span {
-        font-size: 1.5rem;
-        line-height: 1.5rem;
-        font-weight: 500;
-        color: var(--highlight-color);
-        text-align: center;
-    }
-}
-
-.modal-body {
-    height: 100%;
-    padding: 1rem 3rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
 #tier-settings-container {
+    height: 25rem;
+    width: 100%;
+    padding: 0 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    overflow-y: auto;
 }
 
 .tier-settings-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 1rem;
 }
 
-.tier-settings-color-input-label {
+.tier-settings-color-input-label, #new-tier-color-input-label {
     height: 2rem;
     width: 2rem;
     border-radius: 0.25rem;
     background-color: aqua;
+    cursor: pointer;
 }
 
-.tier-settings-label-input {
+.tier-settings-label-input, #new-tier-label-input {
     height: 2rem;
-    width: 100%;
+    flex-grow: 1;
     border-radius: 0.25rem;
     border: none;
     outline: none;
@@ -326,12 +308,51 @@ main {
     color: var(--primary-color);
 }
 
-#settings-modal-hide-button  {
+.tier-settings-delete-button {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+
+    & svg {
+        fill: var(--highlight-color);
+    }
+}
+
+#new-tier-container {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background-color: var(--secondary-color);
+}
+
+#new-tier-add-button {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+
+    & svg {
+        fill: var(--highlight-color);
+    }
+}
+
+#settings-modal-hide-button {
     height: 1.5rem;
     width: 1.5rem;
     position: absolute;
     top: 2rem;
-    right: 3rem;
+    right: 2rem;
     cursor: pointer;
 
     & svg {
