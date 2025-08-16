@@ -1,5 +1,6 @@
 :root {
     --primary-color: rgb(30, 30, 30);
+    --transparent-primary-color: rgb(30, 30, 30, 75%);
     --secondary-color: rgb(40, 40, 40);
     --ternary-color: rgb(50, 50, 50);
     --highlight-color: rgb(200, 200, 200);
@@ -211,7 +212,7 @@ main {
     }
 }
 
-#add-button-label {
+.meta-button {
     height: 4rem;
     width: 4rem;
     padding: 0.5rem;
@@ -228,7 +229,112 @@ main {
     }
 }
 
-#add-button-label:hover {
+.meta-button:hover {
     height: 5rem;
     width: 5rem;
+}
+
+.modal {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: var(--transparent-primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hide {
+    display: none;
+}
+
+.modal-content {
+    height: 35rem;
+    width: 50rem;
+    border-radius: 1rem;
+    background-color: var(--ternary-color);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 3rem;
+
+    & span {
+        font-size: 1.5rem;
+        line-height: 1.5rem;
+        font-weight: 500;
+        color: var(--highlight-color);
+        text-align: center;
+    }
+}
+
+.modal-body {
+    height: 100%;
+    padding: 1rem 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#tier-settings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tier-settings-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.tier-settings-color-input-label {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 0.25rem;
+    background-color: aqua;
+}
+
+.tier-settings-label-input {
+    height: 2rem;
+    width: 100%;
+    border-radius: 0.25rem;
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    background-color: var(--primary-color);
+    color: var(--highlight-color);
+    transition: background-color .1s ease-out, color .1s ease-out;
+}
+
+.tier-settings-label-input:focus {
+    background-color: var(--highlight-color);
+    color: var(--primary-color);
+}
+
+.tier-settings-label-input:hover {
+    background-color: var(--highlight-color);
+    color: var(--primary-color);
+}
+
+#settings-modal-hide-button  {
+    height: 1.5rem;
+    width: 1.5rem;
+    position: absolute;
+    top: 2rem;
+    right: 3rem;
+    cursor: pointer;
+
+    & svg {
+        fill: var(--highlight-color);
+    }
 }
