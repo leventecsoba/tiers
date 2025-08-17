@@ -270,6 +270,8 @@ main {
     flex-direction: column;
     gap: 1rem;
     overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
 }
 
 .tier-settings-row {
@@ -282,7 +284,6 @@ main {
     height: 2rem;
     width: 2rem;
     border-radius: 0.25rem;
-    background-color: aqua;
     cursor: pointer;
 }
 
@@ -292,20 +293,18 @@ main {
     border-radius: 0.25rem;
     border: none;
     outline: none;
-    padding: 0.5rem;
-    background-color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
     color: var(--highlight-color);
     transition: background-color .1s ease-out, color .1s ease-out;
 }
 
-.tier-settings-label-input:focus {
-    background-color: var(--highlight-color);
-    color: var(--primary-color);
+.tier-settings-label-input:focus, #new-tier-label-input:focus {
+    background-color: var(--primary-color);
 }
 
-.tier-settings-label-input:hover {
-    background-color: var(--highlight-color);
-    color: var(--primary-color);
+.tier-settings-label-input:hover, #new-tier-label-input:hover {
+    background-color: var(--primary-color);
 }
 
 .tier-settings-delete-button {
@@ -314,23 +313,26 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
-    background-color: var(--primary-color);
+    border-radius: 0.25rem;
+    background-color: var(--secondary-color);
+    cursor: pointer;
 
     & svg {
         fill: var(--highlight-color);
     }
 }
 
+.tier-settings-delete-button:hover {
+    background-color: var(--primary-color);
+}
+
 #new-tier-container {
     width: 100%;
     padding: 1rem;
-    border-radius: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background-color: var(--secondary-color);
 }
 
 #new-tier-add-button {
@@ -339,12 +341,17 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 0.5rem;
-    background-color: var(--primary-color);
+    border-radius: 0.25rem;
+    background-color: var(--secondary-color);
+    cursor: pointer;
 
     & svg {
         fill: var(--highlight-color);
     }
+}
+
+#new-tier-add-button:hover {
+    background-color: var(--primary-color);
 }
 
 #settings-modal-hide-button {

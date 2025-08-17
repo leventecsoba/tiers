@@ -14,17 +14,18 @@ let isDragging: boolean = false
 let draggedElementObjectURL: string | null = null
 
 interface Tier {
+    id: string
     label: string
     hexColor: string
 }
 
 let tiersArray: Tier[] = [
-    {label: "S", hexColor: "#fe7f7f"},
-    {label: "A", hexColor: "#FFBF7F"},
-    {label: "B", hexColor: "#FEDF81"},
-    {label: "C", hexColor: "#FEFE7F"},
-    {label: "D", hexColor: "#BEFF7E"},
-    {label: "E", hexColor: "#7EFE7F"}
+    {id: crypto.randomUUID(), label: "S", hexColor: "#fe7f7f"},
+    {id: crypto.randomUUID(), label: "A", hexColor: "#FFBF7F"},
+    {id: crypto.randomUUID(), label: "B", hexColor: "#FEDF81"},
+    {id: crypto.randomUUID(), label: "C", hexColor: "#FEFE7F"},
+    {id: crypto.randomUUID(), label: "D", hexColor: "#BEFF7E"},
+    {id: crypto.randomUUID(), label: "E", hexColor: "#7EFE7F"}
 ]
 
 const initAddButton = () => {
@@ -191,6 +192,9 @@ const initDragging = () => {
         if (!isDragging || !draggedElementObjectURL) {
             return
         }
+        e.stopPropagation()
+        e.preventDefault()
+
         const draggedElement = document.getElementById("dragged")
         if (!draggedElement) {
             createDraggedElement(draggedElementObjectURL, e.clientX, e.clientY)
@@ -313,7 +317,7 @@ const initTiers = (tiers: Tier[]) => {
         if (tierSettingsContainer.children.length > i) {
             updateTierSettingsRow(i)
         } else {
-            createTierSettingsRow(tier, i)
+            createTierSettingsRow(tier)
         }
     }
 }
@@ -370,18 +374,18 @@ const updateTierRow = (index: number) => {
 }
 
 const removeTierRow = (index: number) => {
-    if(!tierContainer) {
+    if (!tierContainer) {
         return
     }
     const tierRow = tierContainer.children[index]
-    if(!tierRow) {
+    if (!tierRow) {
         return
     }
     tierContainer.removeChild(tierRow)
 }
 
-const createTierSettingsRow = (tier: Tier, index: number) => {
-    const {label, hexColor} = tier
+const createTierSettingsRow = (tier: Tier, focus: boolean = false) => {
+    const {id: tierId, label, hexColor} = tier
 
     if (!tierSettingsContainer) {
         return
@@ -405,12 +409,15 @@ const createTierSettingsRow = (tier: Tier, index: number) => {
     tierColorInput.addEventListener("input", () => {
         tierColorInputLabel.style.backgroundColor = tierColorInput.value
 
-        tiersArray[index] = {label: tierLabelInput.value, hexColor: tierColorInput.value}
+        const index = tiersArray.findIndex(tier => tier.id === tierId)
+        tiersArray[index] = {id: tierId, label: tierLabelInput.value, hexColor: tierColorInput.value}
         updateTierRow(index)
     })
 
     tierLabelInput.addEventListener("input", () => {
-        tiersArray[index] = {label: tierLabelInput.value, hexColor: tierColorInput.value}
+
+        const index = tiersArray.findIndex(tier => tier.id === tierId)
+        tiersArray[index] = {id: tierId, label: tierLabelInput.value, hexColor: tierColorInput.value}
         updateTierRow(index)
     })
 
@@ -427,6 +434,8 @@ const createTierSettingsRow = (tier: Tier, index: number) => {
     deleteButton.appendChild(deleteButtonSVG)
 
     deleteButton.addEventListener("click", () => {
+
+        const index = tiersArray.findIndex(tier => tier.id === tierId)
         tiersArray.splice(index, 1)
         removeTierRow(index)
         removeTierSettingsRow(index)
@@ -439,6 +448,10 @@ const createTierSettingsRow = (tier: Tier, index: number) => {
     tierSettingsRow.appendChild(deleteButton)
 
     tierSettingsContainer.appendChild(tierSettingsRow)
+
+    if (focus) {
+        tierLabelInput.focus()
+    }
 }
 
 const updateTierSettingsRow = (index: number) => {
@@ -474,11 +487,11 @@ const updateTierSettingsRow = (index: number) => {
 }
 
 const removeTierSettingsRow = (index: number) => {
-    if(!tierSettingsContainer) {
+    if (!tierSettingsContainer) {
         return
     }
     const tierSettingsRow = tierSettingsContainer.children[index]
-    if(!tierSettingsRow) {
+    if (!tierSettingsRow) {
         return
     }
     tierSettingsContainer.removeChild(tierSettingsRow)
@@ -486,7 +499,6 @@ const removeTierSettingsRow = (index: number) => {
 
 const initSettingsModal = () => {
     const openButton = document.getElementById("settings-modal-open-button")
-    // const hideButton = document.getElementById("settings-modal-hide-button")
 
     if (!settingsModal || !openButton || !newTierColorInputLabel || !newTierColorInput || !newTierLabelInput || !newTierAddButton) {
         return
@@ -505,26 +517,24 @@ const initSettingsModal = () => {
         openSettingsModal()
     })
 
-    // hideButton.addEventListener("click", (e) => {
-    //     e.stopPropagation()
-    //     hideSettingsModal()
-    // })
-
     newTierColorInput.addEventListener("input", () => {
         newTierColorInputLabel.style.backgroundColor = newTierColorInput.value
     })
 
     newTierAddButton.addEventListener("click", () => {
-        const newIndex = tiersArray.length
-        const newTier = {label: newTierLabelInput.value, hexColor: newTierColorInput.value}
+        const newTier = {id: crypto.randomUUID(), label: newTierLabelInput.value, hexColor: newTierColorInput.value}
 
         tiersArray.push(newTier)
 
         createTierRow(newTier)
-        createTierSettingsRow(newTier, newIndex)
+        createTierSettingsRow(newTier, true)
+
+        newTierLabelInput.value = ""
+        newTierColorInput.value = ""
+        newTierColorInputLabel.style.backgroundColor = newTierColorInput.value
     })
 
-    document.addEventListener("keydown", (e) => {
+    window.addEventListener("keydown", (e) => {
         if (e.key !== "Escape") {
             return
         }
@@ -534,7 +544,7 @@ const initSettingsModal = () => {
         hideSettingsModal()
     })
 
-    document.addEventListener("click", (mouseEvent) => {
+    window.addEventListener("click", (mouseEvent) => {
         const {clientX: mouseX, clientY: mouseY} = mouseEvent
 
         const isHidden = settingsModal.classList.contains("hide")
