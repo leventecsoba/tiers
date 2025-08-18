@@ -108,7 +108,7 @@ main {
     display: flex;
     gap: 1rem;
     align-items: center;
-    overflow-x: scroll;
+    overflow-x: auto;
     padding: 2rem;
 }
 
