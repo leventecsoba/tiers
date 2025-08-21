@@ -1,3 +1,4 @@
+import { initExport } from "./export"
 import {getRandomColor} from "./utils"
 
 const tierContainer = document.getElementById("tier-container") as HTMLDivElement | null
@@ -601,3 +602,4 @@ initDragging()
 initFooterToggle()
 initPasteHandler()
 initModals()
+initExport()
