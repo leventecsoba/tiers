@@ -4,6 +4,9 @@ import {getRandomColor} from "./utils"
 const tierContainer = document.getElementById("tier-container") as HTMLDivElement | null
 const tierSettingsContainer = document.getElementById("tier-settings-container") as HTMLDivElement | null
 const settingsModal = document.getElementById("settings-modal") as HTMLDivElement | null
+const buttonContainer = document.getElementById("button-container") as HTMLDivElement | null
+const addButtonInput = document.getElementById("add-button-input") as HTMLInputElement | null
+const draggableContainer = document.getElementById("draggable-container") as HTMLDivElement | null
 
 const _PEEPO_CLAP = "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"
 const _HIDE_FOOTER_TIMEOUT = 2000
@@ -26,26 +29,26 @@ let tiersArray: Tier[] = [
     {id: crypto.randomUUID(), label: "E", hexColor: "#7EFE7F"}
 ]
 
-const initAddButton = () => {
-    const addButtonInput = document.getElementById("add-button-input") as HTMLInputElement
-    const buttonContainer = document.getElementById("button-container")
+const initAddButton = async () => {
     if (!addButtonInput || !buttonContainer) {
         return
     }
-    addButtonInput.addEventListener("change", () => {
+
+    const handleChange = async () => {
         if (!addButtonInput.files) {
             return
         }
+
         const filesArray = Array.from(addButtonInput.files)
         for (const file of filesArray) {
-            const imageButton = initImageButton(file)
-            buttonContainer.appendChild(imageButton)
+            initImageButton(file)
         }
-    })
+    }
+
+    addButtonInput.addEventListener("change", handleChange)
 
     const testFile = initTestFile()
-    const imageButton = initImageButton(testFile)
-    buttonContainer.appendChild(imageButton)
+    initImageButton(testFile)
 }
 
 const initTestFile = () => {
@@ -58,7 +61,11 @@ const initTestFile = () => {
     return new File([buffer], "peepoclap.gif", {type: "image/gif"})
 }
 
-const initImageButton = (file: File): HTMLDivElement => {
+const initImageButton = (file: Blob) => {
+    if(!buttonContainer) {
+        return
+    }
+
     const objectURL = URL.createObjectURL(file)
 
     const buttonWrapper = document.createElement("div")
@@ -75,10 +82,10 @@ const initImageButton = (file: File): HTMLDivElement => {
         draggedElementObjectURL = objectURL
     })
 
-    const buttonContent = document.createElement("div")
-    buttonContent.style.background = `url(${objectURL}) center center / contain no-repeat var(--ternary-color)`
+    const buttonContent = document.createElement("img")
     buttonContent.classList.add("button-content")
     buttonContent.draggable = false
+    buttonContent.src = objectURL
 
     buttonContent.addEventListener("drag", (e) => {
         e.preventDefault()
@@ -86,25 +93,25 @@ const initImageButton = (file: File): HTMLDivElement => {
     })
 
     buttonWrapper.appendChild(buttonContent)
-    return buttonWrapper
+    buttonContainer.appendChild(buttonWrapper)
 }
 
 const createDraggedElement = (objectURL: string, initialXPosition: number, initialYPosition: number) => {
+    if (!draggableContainer) {
+        return
+    }
+
     const dragged = document.createElement("div")
     dragged.setAttribute("id", "dragged")
     dragged.style.left = `calc(${initialXPosition}px - 5rem)`
     dragged.style.top = `calc(${initialYPosition}px - 5rem)`
 
-    const draggedImage = document.createElement("div")
+    const draggedImage = document.createElement("img")
     draggedImage.setAttribute("id", "dragged-img")
-    draggedImage.style.background = `url(${objectURL}) center center / contain no-repeat var(--ternary-color)`
-    dragged.appendChild(draggedImage)
+    draggedImage.src = objectURL
 
-    const container = document.getElementById("draggable-container")
-    if (!container) {
-        return null
-    }
-    container.appendChild(dragged)
+    dragged.appendChild(draggedImage)
+    draggableContainer.appendChild(dragged)
 }
 
 const createDragTarget = (dragTargetContainer: Element) => {
@@ -125,9 +132,9 @@ const destroyDragTarget = (dragTargetContainer: Element) => {
 }
 
 const createTierContentItem = (dragTargetContainer: Element, objectURL: string) => {
-    const tierContentItem = document.createElement("div")
+    const tierContentItem = document.createElement("img")
     tierContentItem.classList.add("tier-content-item")
-    tierContentItem.style.background = `url(${objectURL}) center center / contain no-repeat var(--ternary-color)`
+    tierContentItem.src = objectURL
     tierContentItem.draggable = false
 
     tierContentItem.addEventListener("drag", (e) => {
@@ -162,7 +169,7 @@ const resetDraggingProperties = () => {
     }
 
     if (draggedElementObjectURL) {
-        URL.revokeObjectURL(draggedElementObjectURL)
+        // URL.revokeObjectURL(draggedElementObjectURL)
         draggedElementObjectURL = null
     }
 
@@ -291,8 +298,7 @@ const handleFooterPasteEvent = (pasteEvent: ClipboardEvent) => {
         if (!file) {
             continue
         }
-        const imageButton = initImageButton(file)
-        buttonContainer.appendChild(imageButton)
+        initImageButton(file)
     }
 }
 

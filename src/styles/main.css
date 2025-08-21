@@ -115,6 +115,7 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
     cursor: grab;
 }
 
@@ -123,6 +124,8 @@ main {
     width: 4rem;
     border-radius: 0.5rem;
     transition: height .2s ease-out, width .2s ease-out;
+    object-fit: contain;
+    background-color: var(--ternary-color);
 }
 
 .button-content:hover {
@@ -175,6 +178,7 @@ main {
 .tier-content-item {
     height: 8rem;
     width: 8rem;
+    object-fit: contain;
 }
 
 #dragged {
@@ -193,6 +197,8 @@ main {
     width: 100%;
     border-radius: 1rem;
     animation: dragged_animation .3s ease-out;
+    object-fit: contain;
+    background-color: var(--ternary-color);
 }
 
 @keyframes dragged_animation {
@@ -207,10 +213,18 @@ main {
     }
 }
 
-.meta-button {
+.meta-button-wrapper {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.meta-button-content {
     height: 4rem;
     width: 4rem;
-    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -220,13 +234,19 @@ main {
     transition: height .2s ease-out, width .2s ease-out;
 }
 
-.meta-button svg {
-    fill: var(--highlight-color);
-}
-
-.meta-button:hover {
+.meta-button-content:hover {
     height: 5rem;
     width: 5rem;
+}
+
+.meta-button-content svg {
+    fill: var(--highlight-color);
+    transition: height .2s ease-out, width .2s ease-out;
+}
+
+.meta-button-content:hover svg {
+    height: 3rem;
+    width: 3rem;
 }
 
 .modal {
