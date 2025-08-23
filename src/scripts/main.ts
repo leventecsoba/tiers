@@ -1,4 +1,4 @@
-import { initExport } from "./export"
+import {initExport} from "./export"
 import {getDataURIFromFile, getRandomColor, getTestFile} from "./utils"
 
 const tierContainer = document.getElementById("tier-container") as HTMLDivElement | null
@@ -58,7 +58,7 @@ const initAddButton = async () => {
 }
 
 const createDraggable = async (file: File) => {
-    if(!buttonContainer) {
+    if (!buttonContainer) {
         return
     }
 
@@ -103,7 +103,7 @@ const createDraggedElement = async (draggable: Draggable, initialXPosition: numb
     }
 
     const dataURI = await getDataURIFromFile(draggable.file)
-    if(!dataURI) {
+    if (!dataURI) {
         return
     }
 
@@ -139,10 +139,10 @@ const destroyDragTarget = (dragTargetContainer: Element) => {
 
 const createTierContentItem = async (dragTargetContainer: Element, draggable: Draggable) => {
     const dataURI = await getDataURIFromFile(draggable.file)
-    if(!dataURI) {
+    if (!dataURI) {
         return
     }
-    
+
     const tierContentItem = document.createElement("img")
     tierContentItem.classList.add("tier-content-item")
     tierContentItem.src = dataURI
@@ -183,12 +183,12 @@ const resetDraggingProperties = () => {
 
 const initDragging = () => {
     window.addEventListener("mouseup", () => {
-        if(!selectedDraggableId) {
+        if (!selectedDraggableId) {
             return
         }
 
         const currentDraggable = draggablesArray.find((e) => e.id === selectedDraggableId)
-        if(!currentDraggable) {
+        if (!currentDraggable) {
             return
         }
 
@@ -207,12 +207,12 @@ const initDragging = () => {
         const {pageX, pageY, clientX, clientY} = e
 
 
-        if(!selectedDraggableId) {
+        if (!selectedDraggableId) {
             return
         }
-        
+
         const currentDraggable = draggablesArray.find((e) => e.id === selectedDraggableId)
-        if(!currentDraggable) {
+        if (!currentDraggable) {
             return
         }
 
@@ -221,7 +221,7 @@ const initDragging = () => {
             createDraggedElement(currentDraggable, pageX, pageY)
             return
         }
-        
+
         draggedElement.style.left = `calc(${pageX}px - 5rem)`
         draggedElement.style.top = `calc(${pageY}px - 5rem)`
 
@@ -522,7 +522,7 @@ const initSettingsModal = () => {
     const newTierColorInputLabel = document.getElementById("new-tier-color-input-label") as HTMLLabelElement | null
     const newTierColorInput = document.getElementById("new-tier-color-input") as HTMLInputElement | null
     const newTierLabelInput = document.getElementById("new-tier-label-input") as HTMLInputElement | null
-    const newTierAddButton = document.getElementById("new-tier-add-button") as HTMLDivElement | null    
+    const newTierAddButton = document.getElementById("new-tier-add-button") as HTMLDivElement | null
 
     if (!settingsModal || !openButton || !newTierColorInputLabel || !newTierColorInput || !newTierLabelInput || !newTierAddButton) {
         return
@@ -530,7 +530,7 @@ const initSettingsModal = () => {
 
     const initNewTierInputValues = () => {
         newTierColorInput.value = getRandomColor()
-        newTierColorInputLabel.style.backgroundColor = newTierColorInput.value    
+        newTierColorInputLabel.style.backgroundColor = newTierColorInput.value
         newTierLabelInput.value = ""
     }
 
@@ -544,7 +544,7 @@ const initSettingsModal = () => {
 
     const openSettingsModal = () => {
         settingsModal.classList.remove("hide")
-        initNewTierInputValues() 
+        initNewTierInputValues()
     }
 
     const hideSettingsModal = () => {

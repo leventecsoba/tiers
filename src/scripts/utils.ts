@@ -2,7 +2,7 @@ const _PEEPO_CLAP = "R0lGODlhOAA2APeDAAABEAACHQEDIgMGAQAFKAAGMQUJBAEKPgAMRQAQTQc
 
 export const getRandomColor = () => {
     const decimalComponents: number[] = []
-    for (let i = 0; i<3;i++) {
+    for (let i = 0; i < 3; i++) {
         const randomByte = Math.floor(Math.random() * 256)
         decimalComponents.push(randomByte)
     }
@@ -26,8 +26,8 @@ export const getDataURIFromFile = async (file: File) => {
 
         const handleLoad = () => {
             const {result: dataURI} = reader
-            
-            if(!dataURI || typeof dataURI !== "string") {
+
+            if (!dataURI || typeof dataURI !== "string") {
                 resolve(null)
             } else {
                 resolve(dataURI);
