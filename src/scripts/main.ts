@@ -3,6 +3,9 @@ import {initDragging} from "./dragging";
 
 import {getRandomColor} from "./utils"
 
+// @ts-ignore
+const isDevMode = import.meta.env.DEV
+
 const tierContainer = document.getElementById("tier-container") as HTMLDivElement | null
 const tierSettingsContainer = document.getElementById("tier-settings-container") as HTMLDivElement | null
 const settingsModal = document.getElementById("settings-modal") as HTMLDivElement | null
@@ -357,8 +360,9 @@ const initSettingsModal = () => {
         hideSettingsModal()
     })
 
-    // TEMP --> FOR TESTING
-    openSettingsModal()
+    if (isDevMode) {
+        openSettingsModal()
+    }
 }
 
 const initModals = () => {

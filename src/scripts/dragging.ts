@@ -1,5 +1,8 @@
 import {getDataURIFromFile, getTestFile} from "./utils"
 
+// @ts-ignore
+const isDevMode = import.meta.env.DEV
+
 interface Draggable {
     id: string
     file: File
@@ -240,6 +243,8 @@ export const initDragging = async () => {
     await initDraggableContainer()
     initDraggingEvents()
 
-    const testFile = getTestFile()
-    await createDraggable(testFile)
+    if (isDevMode) {
+        const testFile = getTestFile()
+        await createDraggable(testFile)
+    }
 }
