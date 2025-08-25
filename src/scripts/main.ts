@@ -11,6 +11,7 @@ const tierSettingsContainer = document.getElementById("tier-settings-container")
 const settingsModal = document.getElementById("settings-modal") as HTMLDivElement | null
 
 const _HIDE_FOOTER_TIMEOUT = 2000
+const _IMAGE_BACKGROUND_COLOR_VARIABLE = "--image-background-color"
 
 interface Tier {
     id: string
@@ -167,11 +168,10 @@ const createTierSettingsRow = (tier: Tier, focus: boolean = false) => {
     const tierColorInput = document.createElement("input")
     tierColorInput.setAttribute("type", "color")
     tierColorInput.setAttribute("value", hexColor)
-    tierColorInput.classList.add("tier-settings-color-input")
-    tierColorInput.hidden = true
+    tierColorInput.classList.add("color-input")
 
     const tierColorInputLabel = document.createElement("label")
-    tierColorInputLabel.classList.add("tier-settings-color-input-label")
+    tierColorInputLabel.classList.add("color-input-label")
     tierColorInputLabel.style.backgroundColor = hexColor
     tierColorInputLabel.appendChild(tierColorInput)
 
@@ -278,7 +278,10 @@ const initSettingsModal = () => {
     const newTierLabelInput = document.getElementById("new-tier-label-input") as HTMLInputElement | null
     const newTierAddButton = document.getElementById("new-tier-add-button") as HTMLDivElement | null
 
-    if (!settingsModal || !openButton || !newTierColorInputLabel || !newTierColorInput || !newTierLabelInput || !newTierAddButton) {
+    const imageBackgroundColorInputLabel = document.getElementById("image-background-color-input-label") as HTMLLabelElement | null
+    const imageBackgroundColorInput = document.getElementById("image-background-color-input") as HTMLInputElement | null
+
+    if (!settingsModal || !openButton || !newTierColorInputLabel || !newTierColorInput || !newTierLabelInput || !newTierAddButton || !imageBackgroundColorInput || !imageBackgroundColorInputLabel) {
         return
     }
 
@@ -286,6 +289,12 @@ const initSettingsModal = () => {
         newTierColorInput.value = getRandomColor()
         newTierColorInputLabel.style.backgroundColor = newTierColorInput.value
         newTierLabelInput.value = ""
+    }
+
+    const initImageBackgroundColorInputValues = () => {
+        const rootElementStyle = getComputedStyle(document.documentElement, null)
+        imageBackgroundColorInput.value = rootElementStyle.getPropertyValue(_IMAGE_BACKGROUND_COLOR_VARIABLE)
+        imageBackgroundColorInputLabel.style.backgroundColor = imageBackgroundColorInput.value
     }
 
     const createNewTier = () => {
@@ -299,6 +308,7 @@ const initSettingsModal = () => {
     const openSettingsModal = () => {
         settingsModal.classList.remove("hide")
         initNewTierInputValues()
+        initImageBackgroundColorInputValues()
     }
 
     const hideSettingsModal = () => {
@@ -324,6 +334,11 @@ const initSettingsModal = () => {
 
     newTierAddButton.addEventListener("click", () => {
         createNewTier()
+    })
+
+    imageBackgroundColorInput.addEventListener("input", () => {
+        document.documentElement.style.setProperty(_IMAGE_BACKGROUND_COLOR_VARIABLE, imageBackgroundColorInput.value)
+        imageBackgroundColorInputLabel.style.backgroundColor = imageBackgroundColorInput.value
     })
 
     window.addEventListener("keyup", (e) => {

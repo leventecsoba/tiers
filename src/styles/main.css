@@ -1,9 +1,10 @@
 :root {
-    --primary-color: rgb(30, 30, 30);
-    --transparent-primary-color: rgb(30, 30, 30, 75%);
-    --secondary-color: rgb(40, 40, 40);
-    --ternary-color: rgb(50, 50, 50);
-    --highlight-color: rgb(200, 200, 200);
+    --primary-color: #1E1E1E;
+    --transparent-primary-color: #1E1E1EBF;
+    --secondary-color: #282828;
+    --ternary-color: #323232;
+    --highlight-color: #C8C8C8;
+    --image-background-color: var(--ternary-color)
 }
 
 * {
@@ -125,7 +126,7 @@ main {
     border-radius: 0.5rem;
     transition: height .2s ease-out, width .2s ease-out;
     object-fit: contain;
-    background-color: var(--ternary-color);
+    background-color: var(--image-background-color);
 }
 
 .button-content:hover {
@@ -152,7 +153,7 @@ main {
     background-color: white;
 }
 
-.tier-level>span {
+.tier-level > span {
     font-size: 1rem;
     font-weight: 700;
     color: black;
@@ -179,6 +180,7 @@ main {
     height: 8rem;
     width: 8rem;
     object-fit: contain;
+    background-color: var(--image-background-color);
 }
 
 #dragged {
@@ -198,7 +200,7 @@ main {
     border-radius: 1rem;
     animation: dragged_animation .3s ease-out;
     object-fit: contain;
-    background-color: var(--ternary-color);
+    background-color: var(--image-background-color);
 }
 
 @keyframes dragged_animation {
@@ -266,6 +268,15 @@ main {
     display: none;
 }
 
+.modal span {
+    width: max-content;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: var(--highlight-color);
+    text-align: center;
+}
+
 .modal-content {
     width: 50rem;
     padding: 2rem 1rem;
@@ -277,10 +288,31 @@ main {
     position: relative;
 }
 
+.modal-column {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-row {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
 #tier-settings-container {
     height: 25rem;
     width: 100%;
-    padding: 0 1rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -295,10 +327,21 @@ main {
     gap: 1rem;
 }
 
-.tier-settings-color-input-label, #new-tier-color-input-label {
+.color-input-label {
     height: 2rem;
     width: 2rem;
+    border: 1px solid var(--secondary-color);
     border-radius: 0.25rem;
+    position: relative;
+}
+
+.color-input {
+    height: 2rem;
+    width: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
     cursor: pointer;
 }
 
@@ -343,7 +386,6 @@ main {
 
 #new-tier-container {
     width: 100%;
-    padding: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -382,15 +424,8 @@ main {
     fill: var(--highlight-color);
 }
 
-.modal-footer {
-    width: 100%;
-    padding: 0 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
 #export-button {
+    width: max-content;
     padding: 1rem;
     display: flex;
     align-items: center;
@@ -398,14 +433,6 @@ main {
     cursor: pointer;
     border-radius: 0.25rem;
     background-color: var(--secondary-color);
-}
-
-#export-button span {
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 500;
-    color: var(--highlight-color);
-    text-align: center;
 }
 
 #export-button svg {

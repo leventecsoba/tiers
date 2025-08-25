@@ -70,24 +70,38 @@
 </main>
 <div id="settings-modal" class="modal hide">
     <div class="modal-content">
-        <div id="tier-settings-container"></div>
-        <div id="new-tier-container">
-            <label id="new-tier-color-input-label">
-                <input id="new-tier-color-input" type="color" hidden/>
-            </label>
-            <input id="new-tier-label-input" type="text"/>
-            <div id="new-tier-add-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                    <use href="#bi-plus"/>
-                </svg>
+        <div class="modal-column">
+            <span>Tiers</span>
+            <div id="tier-settings-container"></div>
+        </div>
+        <div class="modal-column">
+            <span>Add new tier</span>
+            <div id="new-tier-container">
+                <label id="new-tier-color-input-label" class="color-input-label">
+                    <input id="new-tier-color-input" type="color" class="color-input"/>
+                </label>
+                <input id="new-tier-label-input" type="text" placeholder="Tier label"/>
+                <div id="new-tier-add-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                        <use href="#bi-plus"/>
+                    </svg>
+                </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <div id="export-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                    <use href="#bi-file-earmark-arrow-down"/>
-                </svg>
-                <span>Export</span>
+        <div class="modal-row">
+            <span>Image background color</span>
+            <label id="image-background-color-input-label" class="color-input-label">
+                <input id="image-background-color-input" class="color-input" type="color"/>
+            </label>
+        </div>
+        <div class="modal-column">
+            <div class="modal-footer">
+                <div id="export-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                        <use href="#bi-file-earmark-arrow-down"/>
+                    </svg>
+                    <span>Save as image (PNG)</span>
+                </div>
             </div>
         </div>
     </div>
