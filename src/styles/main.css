@@ -101,7 +101,7 @@ main {
     transform: rotate(45deg);
 }
 
-#button-container {
+#draggable-container {
     width: max-content;
     display: flex;
     gap: 1rem;
@@ -183,7 +183,7 @@ main {
     background-color: var(--image-background-color);
 }
 
-#dragged {
+#drag-ghost {
     height: 8rem;
     width: 8rem;
     position: absolute;
@@ -194,16 +194,16 @@ main {
     align-items: center;
 }
 
-#dragged-img {
+#drag-ghost-image {
     height: 100%;
     width: 100%;
     border-radius: 1rem;
-    animation: dragged_animation .3s ease-out;
+    animation: drag-ghost-animation .3s ease-out;
     object-fit: contain;
     background-color: var(--image-background-color);
 }
 
-@keyframes dragged_animation {
+@keyframes drag-ghost-animation {
     0% {
         height: 0;
         width: 0;

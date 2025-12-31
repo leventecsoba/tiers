@@ -1,29 +1,22 @@
+import {Draggable, ElementID, isDevMode} from "./constants"
 import {getDataURIFromFile, getTestFile} from "./utils"
+import {draggableState} from "./state"
+import {dom} from "./dom"
 
-// @ts-ignore
-const isDevMode = import.meta.env.DEV
-
-interface Draggable {
-    id: string
-    file: File
-}
+const dragGhostContainerElement = dom.get<HTMLDivElement>(ElementID.DRAG_GHOST_CONTAINER)
+const draggableContainerElement = dom.get<HTMLDivElement>(ElementID.DRAGGABLE_CONTAINER)
+const fileInputElement = dom.get<HTMLInputElement>(ElementID.FILE_INPUT)
+const footerElement = dom.get<HTMLDivElement>(ElementID.FOOTER)
 
 let selectedDraggable: Draggable | null = null
 
-const createDraggable = async (file: File) => {
-    const draggableContainer = document.getElementById("button-container") as HTMLDivElement | null
-    if (!draggableContainer) {
+const createDraggable = (id: string, newDraggable: Draggable) => {
+    if (!draggableContainerElement) {
         return
     }
-
-    const dataURI = await getDataURIFromFile(file)
-    if (!dataURI) {
-        return
-    }
-
-    const draggable: Draggable = {id: crypto.randomUUID(), file}
 
     const buttonWrapper = document.createElement("div")
+    buttonWrapper.setAttribute("id", id)
     buttonWrapper.classList.add("button-wrapper")
     buttonWrapper.draggable = false
 
@@ -33,13 +26,13 @@ const createDraggable = async (file: File) => {
     })
 
     buttonWrapper.addEventListener("mousedown", () => {
-        selectedDraggable = draggable
+        selectedDraggable = newDraggable
     })
 
     const buttonContent = document.createElement("img")
     buttonContent.classList.add("button-content")
     buttonContent.draggable = false
-    buttonContent.src = dataURI;
+    buttonContent.src = newDraggable.dataURI;
 
     buttonContent.addEventListener("drag", (e) => {
         e.preventDefault()
@@ -47,47 +40,60 @@ const createDraggable = async (file: File) => {
     })
 
     buttonWrapper.appendChild(buttonContent)
-    draggableContainer.appendChild(buttonWrapper)
+    draggableContainerElement.appendChild(buttonWrapper)
 }
 
-const createDraggedElement = async (draggable: Draggable, initialXPosition: number, initialYPosition: number) => {
-    const draggedElementContainer = document.getElementById("dragged-container")
-    if (!draggedElementContainer) {
+const createDragGhost = (draggable: Draggable, initialXPosition: number, initialYPosition: number) => {
+    if (!dragGhostContainerElement) {
         return
     }
 
-    const dataURI = await getDataURIFromFile(draggable.file)
-    if (!dataURI) {
-        return
-    }
+    const dragGhost = document.createElement("div")
+    dragGhost.setAttribute("id", "drag-ghost")
+    dragGhost.style.left = `calc(${initialXPosition}px - 5rem)`
+    dragGhost.style.top = `calc(${initialYPosition}px - 5rem)`
 
-    const dragged = document.createElement("div")
-    dragged.setAttribute("id", "dragged")
-    dragged.style.left = `calc(${initialXPosition}px - 5rem)`
-    dragged.style.top = `calc(${initialYPosition}px - 5rem)`
+    const dragGhostImage = document.createElement("img")
+    dragGhostImage.setAttribute("id", "drag-ghost-image")
+    dragGhostImage.src = draggable.dataURI
 
-    const draggedImage = document.createElement("img")
-    draggedImage.setAttribute("id", "dragged-img")
-    draggedImage.src = dataURI
-
-    dragged.appendChild(draggedImage)
-    draggedElementContainer.appendChild(dragged)
+    dragGhost.appendChild(dragGhostImage)
+    dragGhostContainerElement.appendChild(dragGhost)
 }
 
-const dropDraggedElement = async (draggable: Draggable) => {
-    const dragTarget = document.getElementById("drag-target")
-    if (!dragTarget?.parentElement) {
+const removeDragGhost = () => {
+    const dragGhostElement = document.getElementById("drag-ghost")
+    const dragGhostContainerElement = dragGhostElement?.parentElement
+    if (!dragGhostContainerElement) {
         return
     }
+    dragGhostContainerElement.removeChild(dragGhostElement)
+}
 
-    const dataURI = await getDataURIFromFile(draggable.file)
-    if (!dataURI) {
+const createDragTarget = (dragTargetContainer: Element) => {
+    const dragTarget = document.createElement("div")
+    dragTarget.setAttribute("id", "drag-target")
+    dragTargetContainer.appendChild(dragTarget)
+}
+
+const removeDragTarget = (dragTargetElement: HTMLDivElement) => {
+    const dragTargetContainerElement = dragTargetElement?.parentElement
+    if (!dragTargetContainerElement) {
+        return
+    }
+    dragTargetContainerElement.removeChild(dragTargetElement)
+}
+
+const createTierContentItem = (draggable: Draggable) => {
+    const dragTargetElement = document.getElementById("drag-target")
+    const dragTargetContainerElement = dragTargetElement?.parentElement
+    if (!dragTargetContainerElement) {
         return
     }
 
     const tierContentItem = document.createElement("img")
     tierContentItem.classList.add("tier-content-item")
-    tierContentItem.src = dataURI
+    tierContentItem.src = draggable.dataURI
     tierContentItem.draggable = false
 
     tierContentItem.addEventListener("drag", (e) => {
@@ -100,151 +106,152 @@ const dropDraggedElement = async (draggable: Draggable) => {
         tierContentItem.setAttribute("id", "drag-source")
     })
 
-    dragTarget.parentElement.replaceChild(tierContentItem, dragTarget)
+    dragTargetContainerElement.replaceChild(tierContentItem, dragTargetElement)
 }
 
-const createDragTarget = (dragTargetContainer: Element) => {
-    const existingDragTarget = document.getElementById("drag-target")
-    if (existingDragTarget) {
+const removeDragSource = () => {
+    const dragSourceElement = document.getElementById("drag-source")
+    const dragSourceContainerElement = dragSourceElement?.parentElement
+    if (!dragSourceContainerElement) {
         return
     }
-    const dragTarget = document.createElement("div")
-    dragTarget.setAttribute("id", "drag-target")
-    dragTargetContainer.appendChild(dragTarget)
+    dragSourceContainerElement.removeChild(dragSourceElement)
 }
 
-const destroyDragTarget = (dragTargetContainer: Element) => {
-    const dragTarget = dragTargetContainer.querySelector("#drag-target")
-    if (!dragTarget) {
+const getHoveredDragTargetContainerElement = (clientX: number, clientY: number) => {
+    const dragTargetContainerElements = document.getElementsByClassName("drag-target-container")
+    for (const dragTargetContainerElement of Array.from(dragTargetContainerElements)) {
+        const boundingRect = dragTargetContainerElement.getBoundingClientRect()
+        const {x, y, width, height} = boundingRect
+
+        const doesXOverlap = clientX > x && clientX < x + width
+        const doesYOverlap = clientY > y && clientY < y + height
+
+        if (doesXOverlap && doesYOverlap) {
+            return dragTargetContainerElement
+        }
+    }
+
+    return null
+}
+
+
+const handleMouseUp = () => {
+    if (!selectedDraggable) {
         return
     }
-    dragTargetContainer.removeChild(dragTarget)
-}
 
-const resetDraggingProperties = () => {
-    const draggedElement = document.getElementById("dragged")
-    const draggedElementContainer = draggedElement?.parentElement
-    if (draggedElementContainer) {
-        draggedElementContainer.removeChild(draggedElement)
-    }
-
-    const dragSource = document.getElementById("drag-source")
-    const dragSourceContainer = dragSource?.parentElement
-    if (dragSourceContainer) {
-        dragSourceContainer.removeChild(dragSource)
-    }
+    createTierContentItem(selectedDraggable)
+    removeDragGhost()
+    removeDragSource()
 
     selectedDraggable = null
 }
 
-const initDraggingEvents = () => {
-    const handleMouseUp = async () => {
-        if (!selectedDraggable) {
-            return
-        }
-        await dropDraggedElement(selectedDraggable)
-        resetDraggingProperties()
+const handleMouseMove = (e: MouseEvent) => {
+    const {pageX, pageY, clientX, clientY} = e
+
+    if (!selectedDraggable) {
+        return
     }
 
-    const handleMouseDown = async (e: MouseEvent) => {
-        const {pageX, pageY, clientX, clientY} = e
-
-        if (!selectedDraggable) {
-            return
-        }
-
-        const draggedElement = document.getElementById("dragged")
-        if (!draggedElement) {
-            await createDraggedElement(selectedDraggable, pageX, pageY)
-            return
-        }
-
-        draggedElement.style.left = `calc(${pageX}px - 5rem)`
-        draggedElement.style.top = `calc(${pageY}px - 5rem)`
-
-        const dragTargetContainers = document.getElementsByClassName("drag-target-container")
-        for (const dragTargetContainer of Array.from(dragTargetContainers)) {
-            const dragTargetContainerBoundingRect = dragTargetContainer.getBoundingClientRect()
-
-            const {x: dragTargetContainerX, y: dragTargetContainerY} = dragTargetContainerBoundingRect
-            const {width: dragTargetContainerWidth, height: dragTargetContainerHeight} = dragTargetContainerBoundingRect
-
-            const doesXOverlap = clientX > dragTargetContainerX && clientX < dragTargetContainerX + dragTargetContainerWidth
-            const doesYOverlap = clientY > dragTargetContainerY && clientY < dragTargetContainerY + dragTargetContainerHeight
-
-            if (doesXOverlap && doesYOverlap) {
-                createDragTarget(dragTargetContainer)
-            } else {
-                destroyDragTarget(dragTargetContainer)
-            }
-        }
+    const dragGhost = document.getElementById("drag-ghost")
+    if (!dragGhost) {
+        createDragGhost(selectedDraggable, pageX, pageY)
+        return
     }
 
-    window.addEventListener("mouseup", handleMouseUp)
-    window.addEventListener("mousemove", handleMouseDown)
+    dragGhost.style.left = `calc(${pageX}px - 5rem)`
+    dragGhost.style.top = `calc(${pageY}px - 5rem)`
+
+    const dragTargetElement = document.getElementById("drag-target") as HTMLDivElement
+    const hoveredDragTargetContainerElement = getHoveredDragTargetContainerElement(clientX, clientY)
+
+    if (hoveredDragTargetContainerElement) {
+        if (!dragTargetElement) {
+            createDragTarget(hoveredDragTargetContainerElement)
+        } else if (dragTargetElement.parentElement !== hoveredDragTargetContainerElement) {
+            hoveredDragTargetContainerElement.appendChild(dragTargetElement)
+        }
+    } else if (dragTargetElement) {
+        removeDragTarget(dragTargetElement)
+    }
 }
 
-const handleDraggableFileInputChange = async (e: Event) => {
-    const {files} = e.target as HTMLInputElement
+const handleChange = async () => {
+    if (!fileInputElement) {
+        return
+    }
+
+    const {files} = fileInputElement
     if (!files) {
         return
     }
+
     const filesArray = Array.from(files)
     for (const file of filesArray) {
-        await createDraggable(file)
+        const dataURI = await getDataURIFromFile(file)
+        if (!dataURI) {
+            continue
+        }
+
+        draggableState.add({dataURI})
     }
 }
 
-const initDraggableFileInput = async () => {
-    const draggableFileInput = document.getElementById("add-button-input")
-    if (!draggableFileInput) {
+
+const handlePaste = async (e: ClipboardEvent) => {
+    if (!footerElement) {
         return
     }
 
-    draggableFileInput.addEventListener("change", handleDraggableFileInputChange)
-}
+    const isBlurred = footerElement.classList.contains("blur")
+    if (isBlurred) {
+        return
+    }
 
-const handleDraggableContainerPaste = async (e: ClipboardEvent) => {
     const {clipboardData} = e
     if (!clipboardData) {
         return
     }
+
     const clipboardDataItems = Array.from(clipboardData.items)
     for (const item of clipboardDataItems) {
         const file = item.getAsFile()
         if (!file) {
             continue
         }
-        await createDraggable(file)
-    }
-}
 
-const initDraggableContainer = async () => {
-
-    const handlePaste = async (e: ClipboardEvent) => {
-        const footer = document.getElementById("footer")
-        if (!footer) {
-            return
+        const dataURI = await getDataURIFromFile(file)
+        if (!dataURI) {
+            continue
         }
 
-        const isBlurred = footer.classList.contains("blur")
-        if (isBlurred) {
-            return
-        }
-
-        await handleDraggableContainerPaste(e)
+        draggableState.add({dataURI})
     }
-
-    window.addEventListener("paste", handlePaste)
 }
 
 export const initDragging = async () => {
-    await initDraggableFileInput()
-    await initDraggableContainer()
-    initDraggingEvents()
+    if (!fileInputElement) {
+        return
+    }
+
+    fileInputElement.addEventListener("change", handleChange)
+
+    window.addEventListener("paste", handlePaste)
+    window.addEventListener("mouseup", handleMouseUp)
+    window.addEventListener("mousemove", handleMouseMove)
+
+    draggableState.subscribe({type: "add", callback: createDraggable})
 
     if (isDevMode) {
         const testFile = getTestFile()
-        await createDraggable(testFile)
+
+        const dataURI = await getDataURIFromFile(testFile)
+        if (!dataURI) {
+            return
+        }
+
+        draggableState.add({dataURI})
     }
 }
