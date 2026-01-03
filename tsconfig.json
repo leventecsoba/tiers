@@ -1,13 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "strict": true,
-        "outDir": "./dist",
-        "rootDir": "./",
-        "esModuleInterop": true
-    },
-    "include": [
-        "main.ts"
+  "compilerOptions": {
+    "target": "es2021",
+    "module": "es2022",
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./",
+    "esModuleInterop": true,
+    "lib": [
+      "ES2021",
+      "dom"
     ]
+  },
+  "include": [
+    "src/scripts/*.ts",
+    "src/vite-env.d.ts"
+  ]
 }

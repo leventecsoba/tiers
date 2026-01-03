@@ -1,0 +1,445 @@
+:root {
+    --primary-color: #1E1E1E;
+    --transparent-primary-color: #1E1E1EBF;
+    --secondary-color: #282828;
+    --ternary-color: #323232;
+    --highlight-color: #C8C8C8;
+    --image-background-color: var(--ternary-color)
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--secondary-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+main {
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+#footer {
+    width: 100%;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background-color: var(--primary-color);
+    transition: bottom .2s ease-out, opacity .2s ease-out;
+    opacity: 1;
+}
+
+#footer-inner-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#footer.hide {
+    bottom: -9rem;
+}
+
+#footer.blur {
+    opacity: 0.7;
+}
+
+#footer-toggle {
+    height: 2rem;
+    width: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background-color: var(--primary-color);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: -2rem;
+    cursor: pointer;
+}
+
+#footer-toggle-arrow {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: inline-block;
+    position: relative;
+}
+
+#footer-toggle-arrow div {
+    top: .5rem;
+    position: absolute;
+    width: .75rem;
+    height: .1rem;
+    background-color: var(--highlight-color);
+    display: inline-block;
+    transition: all .2s ease;
+}
+
+#footer-toggle-arrow div:first-of-type {
+    left: 0;
+    transform: rotate(45deg);
+}
+
+#footer-toggle-arrow div:last-of-type {
+    right: 0;
+    transform: rotate(-45deg);
+}
+
+#footer.blur #footer-toggle-arrow div:first-of-type {
+    transform: rotate(-45deg);
+}
+
+#footer.blur #footer-toggle-arrow div:last-of-type {
+    transform: rotate(45deg);
+}
+
+#draggable-container {
+    width: max-content;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    overflow-x: auto;
+    padding: 2rem;
+}
+
+.button-wrapper {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: grab;
+}
+
+.button-content {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 0.5rem;
+    transition: height .2s ease-out, width .2s ease-out;
+    object-fit: contain;
+    background-color: var(--image-background-color);
+}
+
+.button-content:hover {
+    height: 5rem;
+    width: 5rem;
+}
+
+#tier-container {
+    background-color: var(--secondary-color);
+}
+
+.tier-row {
+    display: flex;
+    background-color: var(--secondary-color);
+}
+
+.tier-level {
+    height: 8rem;
+    width: 8rem;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+}
+
+.tier-level > span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+}
+
+.tier-content {
+    display: flex;
+    flex: 1;
+}
+
+#drag-target {
+    height: 8rem;
+    width: 8rem;
+    background: var(--ternary-color);
+}
+
+#drag-source {
+    opacity: 0.3;
+}
+
+.tier-content-item {
+    height: 8rem;
+    width: 8rem;
+    object-fit: contain;
+    background-color: var(--image-background-color);
+}
+
+#drag-ghost {
+    height: 8rem;
+    width: 8rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#drag-ghost-image {
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    animation: drag-ghost-animation .3s ease-out;
+    object-fit: contain;
+    background-color: var(--image-background-color);
+}
+
+@keyframes drag-ghost-animation {
+    0% {
+        height: 0;
+        width: 0;
+    }
+
+    100% {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.meta-button-wrapper {
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.meta-button-content {
+    height: 4rem;
+    width: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background-color: var(--ternary-color);
+    cursor: pointer;
+    transition: height .2s ease-out, width .2s ease-out;
+}
+
+.meta-button-content:hover {
+    height: 5rem;
+    width: 5rem;
+}
+
+.meta-button-content svg {
+    fill: var(--highlight-color);
+    transition: height .2s ease-out, width .2s ease-out;
+}
+
+.meta-button-content:hover svg {
+    height: 3rem;
+    width: 3rem;
+}
+
+.modal {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: var(--transparent-primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.hide {
+    display: none;
+}
+
+.modal span {
+    width: max-content;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: var(--highlight-color);
+    text-align: center;
+}
+
+.modal-content {
+    width: 50rem;
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+    background-color: var(--ternary-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+}
+
+.modal-column {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-row {
+    width: 100%;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+#tier-settings-container {
+    height: 25rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.tier-settings-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.color-input-label {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid var(--secondary-color);
+    border-radius: 0.25rem;
+    position: relative;
+}
+
+.color-input {
+    height: 2rem;
+    width: 2rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.tier-settings-label-input, #new-tier-label-input {
+    height: 2rem;
+    flex-grow: 1;
+    border-radius: 0.25rem;
+    border: none;
+    outline: none;
+    padding: 0.5rem 1rem;
+    background-color: var(--secondary-color);
+    color: var(--highlight-color);
+    transition: background-color .1s ease-out, color .1s ease-out;
+}
+
+.tier-settings-label-input:focus, #new-tier-label-input:focus {
+    background-color: var(--primary-color);
+}
+
+.tier-settings-label-input:hover, #new-tier-label-input:hover {
+    background-color: var(--primary-color);
+}
+
+.tier-settings-delete-button {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+.tier-settings-delete-button svg {
+    fill: var(--highlight-color);
+}
+
+.tier-settings-delete-button:hover {
+    background-color: var(--primary-color);
+}
+
+#new-tier-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#new-tier-add-button {
+    height: 2rem;
+    width: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25rem;
+    background-color: var(--secondary-color);
+    cursor: pointer;
+}
+
+#new-tier-add-button svg {
+    fill: var(--highlight-color);
+}
+
+#new-tier-add-button:hover {
+    background-color: var(--primary-color);
+}
+
+#settings-modal-hide-button {
+    height: 1.5rem;
+    width: 1.5rem;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    cursor: pointer;
+}
+
+#settings-modal-hide-button svg {
+    fill: var(--highlight-color);
+}
+
+#export-button {
+    width: max-content;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    background-color: var(--secondary-color);
+}
+
+#export-button svg {
+    fill: var(--highlight-color);
+}
+
+
+#export-button:hover {
+    background-color: var(--primary-color);
+}
