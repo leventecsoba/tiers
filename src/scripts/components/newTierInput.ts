@@ -1,14 +1,18 @@
+import {addTier} from "../state/tier"
+
 import {ElementID, Tier} from "../constants"
 import {getRandomColor} from "../utils"
-import {tierState} from "../state"
 import {dom} from "../dom"
+
+import {createTierSettingsRowElement} from "./tierSettingsRow"
+import {createTierRowElement} from "./tierRow"
 
 const newTierColorInputElement = dom.get<HTMLInputElement>(ElementID.NEW_TIER_COLOR_INPUT)
 const newTierColorInputLabelElement = dom.get<HTMLLabelElement>(ElementID.NEW_TIER_COLOR_INPUT_LABEL)
 const newTierLabelInputElement = dom.get<HTMLInputElement>(ElementID.NEW_TIER_LABEL_INPUT)
 const newTierAddButtonElement = dom.get<HTMLDivElement>(ElementID.NEW_TIER_ADD_BUTTON)
 
-const getNewTier = (): Tier | null => {
+const getNewTierData = (): Omit<Tier, "id"> | null => {
     if (!newTierColorInputElement || !newTierLabelInputElement) {
         return null
     }
@@ -27,22 +31,28 @@ const handleKeyDown = (e: KeyboardEvent) => {
         return
     }
 
-    const newTier = getNewTier()
-    if (!newTier) {
+    const data = getNewTierData()
+    if (!data) {
         return
     }
 
-    tierState.add(newTier)
+    const tier = addTier(data)
+    createTierRowElement(tier)
+    createTierSettingsRowElement(tier)
+
     resetNewTierInputValues()
 }
 
 const handleClick = () => {
-    const newTier = getNewTier()
-    if (!newTier) {
+    const data = getNewTierData()
+    if (!data) {
         return
     }
 
-    tierState.add(newTier)
+    const tier = addTier(data)
+    createTierRowElement(tier)
+    createTierSettingsRowElement(tier)
+
     resetNewTierInputValues()
 }
 

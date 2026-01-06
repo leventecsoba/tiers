@@ -1,38 +1,32 @@
-import {Draggable, ElementID, isDevMode} from "./constants"
-import {getDataURIFromFile, getTestFile} from "./utils"
-import {draggableState} from "./state"
-import {dom} from "./dom"
+import {addDraggable, getSelectedDraggable, setSelectedDraggableId} from "../state/draggable";
+import {Draggable, ElementID, isDevMode} from "../constants"
+import {getDataURIFromFile, getTestFile} from "../utils"
+import {dom} from "../dom"
 
 const dragGhostContainerElement = dom.get<HTMLDivElement>(ElementID.DRAG_GHOST_CONTAINER)
 const draggableContainerElement = dom.get<HTMLDivElement>(ElementID.DRAGGABLE_CONTAINER)
 const fileInputElement = dom.get<HTMLInputElement>(ElementID.FILE_INPUT)
 const footerElement = dom.get<HTMLDivElement>(ElementID.FOOTER)
 
-let selectedDraggable: Draggable | null = null
-
-const createDraggable = (id: string, newDraggable: Draggable) => {
+const createDraggableElement = (draggable: Draggable) => {
     if (!draggableContainerElement) {
         return
     }
 
     const buttonWrapper = document.createElement("div")
-    buttonWrapper.setAttribute("id", id)
-    buttonWrapper.classList.add("button-wrapper")
+    buttonWrapper.classList.add("button-wrapper", "draggable")
     buttonWrapper.draggable = false
+    buttonWrapper.dataset.draggableId = draggable.id
 
     buttonWrapper.addEventListener("drag", (e) => {
         e.preventDefault()
         e.stopPropagation()
     })
 
-    buttonWrapper.addEventListener("mousedown", () => {
-        selectedDraggable = newDraggable
-    })
-
     const buttonContent = document.createElement("img")
     buttonContent.classList.add("button-content")
     buttonContent.draggable = false
-    buttonContent.src = newDraggable.dataURI;
+    buttonContent.src = draggable.dataURI
 
     buttonContent.addEventListener("drag", (e) => {
         e.preventDefault()
@@ -95,15 +89,11 @@ const createTierContentItem = (draggable: Draggable) => {
     tierContentItem.classList.add("tier-content-item")
     tierContentItem.src = draggable.dataURI
     tierContentItem.draggable = false
+    tierContentItem.dataset.draggableId = draggable.id
 
     tierContentItem.addEventListener("drag", (e) => {
         e.preventDefault()
         e.stopPropagation()
-    })
-
-    tierContentItem.addEventListener("mousedown", () => {
-        selectedDraggable = draggable
-        tierContentItem.setAttribute("id", "drag-source")
     })
 
     dragTargetContainerElement.replaceChild(tierContentItem, dragTargetElement)
@@ -137,27 +127,29 @@ const getHoveredDragTargetContainerElement = (clientX: number, clientY: number) 
 
 
 const handleMouseUp = () => {
-    if (!selectedDraggable) {
+    const draggable = getSelectedDraggable()
+    if (!draggable) {
         return
     }
 
-    createTierContentItem(selectedDraggable)
+    createTierContentItem(draggable)
     removeDragGhost()
     removeDragSource()
 
-    selectedDraggable = null
+    setSelectedDraggableId(null)
 }
 
 const handleMouseMove = (e: MouseEvent) => {
     const {pageX, pageY, clientX, clientY} = e
 
-    if (!selectedDraggable) {
+    const draggable = getSelectedDraggable()
+    if (!draggable) {
         return
     }
 
     const dragGhost = document.getElementById("drag-ghost")
     if (!dragGhost) {
-        createDragGhost(selectedDraggable, pageX, pageY)
+        createDragGhost(draggable, pageX, pageY)
         return
     }
 
@@ -195,7 +187,8 @@ const handleChange = async () => {
             continue
         }
 
-        draggableState.add({dataURI})
+        const draggable = addDraggable({dataURI})
+        createDraggableElement(draggable)
     }
 }
 
@@ -227,22 +220,55 @@ const handlePaste = async (e: ClipboardEvent) => {
             continue
         }
 
-        draggableState.add({dataURI})
+        const draggable = addDraggable({dataURI})
+        createDraggableElement(draggable)
     }
 }
 
-export const initDragging = async () => {
-    if (!fileInputElement) {
+const handleDraggableContainerMouseDown = (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+    const draggableElement = target.closest<HTMLDivElement>(".draggable")
+    if (!draggableElement) {
+        return
+    }
+
+    const {draggableId} = draggableElement.dataset
+    if (!draggableId) {
+        return
+    }
+
+    setSelectedDraggableId(draggableId)
+}
+
+const handleMouseDown = (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+    const tierContentItemElement = target.closest<HTMLImageElement>(".tier-content-item")
+    if (!tierContentItemElement) {
+        return
+    }
+
+    const {draggableId} = tierContentItemElement.dataset
+    if (!draggableId) {
+        return
+    }
+
+    setSelectedDraggableId(draggableId)
+
+    tierContentItemElement.setAttribute("id", "drag-source")
+}
+
+export const initDraggingComponents = async () => {
+    if (!fileInputElement || !draggableContainerElement) {
         return
     }
 
     fileInputElement.addEventListener("change", handleChange)
+    draggableContainerElement.addEventListener("mousedown", handleDraggableContainerMouseDown)
 
     window.addEventListener("paste", handlePaste)
-    window.addEventListener("mouseup", handleMouseUp)
+    window.addEventListener("mousedown", handleMouseDown)
     window.addEventListener("mousemove", handleMouseMove)
-
-    draggableState.subscribe({type: "add", callback: createDraggable})
+    window.addEventListener("mouseup", handleMouseUp)
 
     if (isDevMode) {
         const testFile = getTestFile()
@@ -252,6 +278,7 @@ export const initDragging = async () => {
             return
         }
 
-        draggableState.add({dataURI})
+        const draggable = addDraggable({dataURI})
+        createDraggableElement(draggable)
     }
 }

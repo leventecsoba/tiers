@@ -22,10 +22,21 @@ export type ElementID = (typeof ElementID)[keyof typeof ElementID]
 export const isDevMode = import.meta.env.DEV
 
 export interface Tier {
+    id: string
     label: string
     hexColor: string
 }
 
 export interface Draggable {
+    id: string
     dataURI: string
 }
+
+export const initialTierData: Omit<Tier, "id">[] = [
+    {label: "S", hexColor: "#fe7f7f"},
+    {label: "A", hexColor: "#FFBF7F"},
+    {label: "B", hexColor: "#FEDF81"},
+    {label: "C", hexColor: "#FEFE7F"},
+    {label: "D", hexColor: "#BEFF7E"},
+    {label: "E", hexColor: "#7EFE7F"}
+]

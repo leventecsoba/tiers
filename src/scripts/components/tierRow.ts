@@ -1,15 +1,14 @@
 import {ElementID, Tier} from "../constants"
-import {tierState} from "../state"
 import {dom} from "../dom"
 
 const containerElement = dom.get<HTMLDivElement>(ElementID.TIER_CONTAINER)
 
-const createTierRow = (id: string, newTier: Tier) => {
+export const createTierRowElement = (tier: Tier) => {
     if (!containerElement) {
         return
     }
 
-    const {label, hexColor} = newTier
+    const {id, label, hexColor} = tier
 
     const tierLabel = document.createElement("span")
     tierLabel.innerText = label
@@ -31,14 +30,14 @@ const createTierRow = (id: string, newTier: Tier) => {
     containerElement.appendChild(tierRow)
 }
 
-const updateTierRow = (id: string, updatedTier: Tier) => {
-    const element = dom.get(`tier_row_${id}`)
+export const updateTierRowElement = (tierId: string, data: Omit<Tier, "id">) => {
+    const element = dom.get(`tier_row_${tierId}`)
     if (!element) {
         return
     }
 
     const {children} = element
-    const {label, hexColor} = updatedTier
+    const {label, hexColor} = data
 
     const tierLevel = children[0] as HTMLDivElement
     if (!tierLevel) {
@@ -55,23 +54,16 @@ const updateTierRow = (id: string, updatedTier: Tier) => {
     tierLabel.innerText = label
 }
 
-const removeTierRow = (id: string) => {
+export const removeTierRowElement = (tierId: string) => {
     if (!containerElement) {
         return
     }
 
-    const element = dom.get(`tier_row_${id}`)
+    const element = dom.get(`tier_row_${tierId}`)
     if (!element) {
         return
     }
 
     containerElement.removeChild(element)
-    dom.delete(`tier_row_${id}`)
-}
-
-
-export const initTierRows = () => {
-    tierState.subscribe({type: "add", callback: createTierRow})
-    tierState.subscribe({type: "update", callback: updateTierRow})
-    tierState.subscribe({type: "remove", callback: removeTierRow})
+    dom.delete(`tier_row_${tierId}`)
 }

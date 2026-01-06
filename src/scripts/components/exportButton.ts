@@ -1,5 +1,5 @@
-import {ElementID} from "./constants"
-import {dom} from "./dom"
+import {ElementID} from "../constants"
+import {dom} from "../dom"
 
 const tierContainer = dom.get<HTMLDivElement>(ElementID.TIER_CONTAINER)
 const exportButton = dom.get<HTMLDivElement>(ElementID.EXPORT_BUTTON)
@@ -99,7 +99,7 @@ const handleClick = () => {
     exportHTMLElement(tierContainer)
 }
 
-export const initExport = () => {
+export const initExportButton = () => {
     if (!exportButton) {
         return
     }

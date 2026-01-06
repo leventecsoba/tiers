@@ -1,15 +1,17 @@
+import {removeTier, updateTier} from "../state/tier";
 import {ElementID, Tier} from "../constants"
-import {tierState} from "../state"
 import {dom} from "../dom"
+
+import {removeTierRowElement, updateTierRowElement} from "./tierRow";
 
 const containerElement = dom.get<HTMLDivElement>(ElementID.TIER_SETTINGS_CONTAINER)
 
-const createTierSettingsRow = (id: string, newTier: Tier) => {
+export const createTierSettingsRowElement = (tier: Tier) => {
     if (!containerElement) {
         return
     }
 
-    const {label, hexColor} = newTier
+    const {id, label, hexColor} = tier
 
     const tierColorInput = document.createElement("input")
     tierColorInput.setAttribute("type", "color")
@@ -26,11 +28,17 @@ const createTierSettingsRow = (id: string, newTier: Tier) => {
     tierLabelInput.value = label
 
     tierColorInput.addEventListener("input", () => {
-        tierState.update(id, {hexColor: tierColorInput.value, label: tierLabelInput.value})
+        const data = {hexColor: tierColorInput.value, label: tierLabelInput.value}
+        updateTier(id, data)
+        updateTierRowElement(id, data)
+        updateTierSettingsRowElement(id, data)
     })
 
     tierLabelInput.addEventListener("input", () => {
-        tierState.update(id, {hexColor: tierColorInput.value, label: tierLabelInput.value})
+        const data = {hexColor: tierColorInput.value, label: tierLabelInput.value}
+        updateTier(id, data)
+        updateTierRowElement(id, data)
+        updateTierSettingsRowElement(id, data)
     })
 
     const deleteButtonIconReference = document.createElementNS("http://www.w3.org/2000/svg", "use")
@@ -46,7 +54,9 @@ const createTierSettingsRow = (id: string, newTier: Tier) => {
     deleteButton.appendChild(deleteButtonSVG)
 
     deleteButton.addEventListener("click", () => {
-        tierState.remove(id)
+        removeTier(id)
+        removeTierRowElement(id)
+        removeTierSettingsRowElement(id)
     })
 
     const tierSettingsRow = document.createElement("div")
@@ -63,14 +73,14 @@ const createTierSettingsRow = (id: string, newTier: Tier) => {
     // }
 }
 
-const updateTierSettingsRow = (id: string, updatedTier: Tier) => {
-    const element = dom.get(`tier_settings_row_${id}`)
+const updateTierSettingsRowElement = (tierId: string, data: Omit<Tier, "id">) => {
+    const element = dom.get(`tier_settings_row_${tierId}`)
     if (!element) {
         return
     }
 
     const {children} = element
-    const {label, hexColor} = updatedTier
+    const {label, hexColor} = data
 
     const tierColorInputLabel = children[0] as HTMLLabelElement
     if (!tierColorInputLabel) {
@@ -94,23 +104,16 @@ const updateTierSettingsRow = (id: string, updatedTier: Tier) => {
     tierLabelInput.value = label
 }
 
-const removeTierSettingsRow = (id: string) => {
+const removeTierSettingsRowElement = (tierId: string) => {
     if (!containerElement) {
         return
     }
 
-    const element = dom.get(`tier_settings_row_${id}`)
+    const element = dom.get(`tier_settings_row_${tierId}`)
     if (!element) {
         return
     }
 
     containerElement.removeChild(element)
-    dom.delete(`tier_settings_row_${id}`)
-}
-
-
-export const initTierSettingsRows = () => {
-    tierState.subscribe({type: "add", callback: createTierSettingsRow})
-    tierState.subscribe({type: "update", callback: updateTierSettingsRow})
-    tierState.subscribe({type: "remove", callback: removeTierSettingsRow})
+    dom.delete(`tier_settings_row_${tierId}`)
 }
