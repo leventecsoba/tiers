@@ -1,9 +1,9 @@
-import {defineConfig} from "vite";
+import { defineConfig } from 'vite'
 
 export default defineConfig({
-    root: ".",
-    base: '/tiers/',
-    build: {
-        outDir: "dist"
-    }
-});
+  root: '.',
+  base: '/tiers/',
+  build: {
+    outDir: 'dist',
+  },
+})

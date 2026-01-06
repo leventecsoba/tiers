@@ -1,69 +1,69 @@
-import {ElementID, Tier} from "../constants"
-import {dom} from "../dom"
+import { ElementID, Tier } from '../constants'
+import { dom } from '../dom'
 
 const containerElement = dom.get<HTMLDivElement>(ElementID.TIER_CONTAINER)
 
 export const createTierRowElement = (tier: Tier) => {
-    if (!containerElement) {
-        return
-    }
+  if (!containerElement) {
+    return
+  }
 
-    const {id, label, hexColor} = tier
+  const { id, label, hexColor } = tier
 
-    const tierLabel = document.createElement("span")
-    tierLabel.innerText = label
+  const tierLabel = document.createElement('span')
+  tierLabel.innerText = label
 
-    const tierLevel = document.createElement("div")
-    tierLevel.classList.add("tier-level")
-    tierLevel.style.backgroundColor = hexColor
-    tierLevel.appendChild(tierLabel)
+  const tierLevel = document.createElement('div')
+  tierLevel.classList.add('tier-level')
+  tierLevel.style.backgroundColor = hexColor
+  tierLevel.appendChild(tierLabel)
 
-    const tierContent = document.createElement("div")
-    tierContent.classList.add("tier-content", "drag-target-container")
+  const tierContent = document.createElement('div')
+  tierContent.classList.add('tier-content', 'drag-target-container')
 
-    const tierRow = document.createElement("div")
-    tierRow.setAttribute("id", `tier_row_${id}`)
-    tierRow.classList.add("tier-row")
-    tierRow.appendChild(tierLevel)
-    tierRow.appendChild(tierContent)
+  const tierRow = document.createElement('div')
+  tierRow.setAttribute('id', `tier_row_${id}`)
+  tierRow.classList.add('tier-row')
+  tierRow.appendChild(tierLevel)
+  tierRow.appendChild(tierContent)
 
-    containerElement.appendChild(tierRow)
+  containerElement.appendChild(tierRow)
 }
 
-export const updateTierRowElement = (tierId: string, data: Omit<Tier, "id">) => {
-    const element = dom.get(`tier_row_${tierId}`)
-    if (!element) {
-        return
-    }
+export const updateTierRowElement = (tierId: string, data: Omit<Tier, 'id'>) => {
+  const element = dom.get(`tier_row_${tierId}`)
+  if (!element) {
+    return
+  }
 
-    const {children} = element
-    const {label, hexColor} = data
+  const { children } = element
+  const { label, hexColor } = data
 
-    const tierLevel = children[0] as HTMLDivElement
-    if (!tierLevel) {
-        return
-    }
-    tierLevel.style.backgroundColor = hexColor
+  const tierLevel = children[0] as HTMLDivElement
+  if (!tierLevel) {
+    return
+  }
+  tierLevel.style.backgroundColor = hexColor
 
-    const tierLabelElements = tierLevel.getElementsByTagName("span")
-    if (!tierLabelElements.length) {
-        return
-    }
+  const tierLabelElements = tierLevel.getElementsByTagName('span')
+  if (!tierLabelElements.length) {
+    return
+  }
 
-    const tierLabel = tierLabelElements[0] as HTMLSpanElement
-    tierLabel.innerText = label
+  const tierLabel = tierLabelElements[0] as HTMLSpanElement
+  tierLabel.innerText = label
 }
 
 export const removeTierRowElement = (tierId: string) => {
-    if (!containerElement) {
-        return
-    }
+  if (!containerElement) {
+    return
+  }
 
-    const element = dom.get(`tier_row_${tierId}`)
-    if (!element) {
-        return
-    }
+  const element = dom.get(`tier_row_${tierId}`)
+  if (!element) {
+    return
+  }
 
-    containerElement.removeChild(element)
-    dom.delete(`tier_row_${tierId}`)
+  containerElement.removeChild(element)
+  dom.delete(`tier_row_${tierId}`)
 }
