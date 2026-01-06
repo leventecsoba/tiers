@@ -6,13 +6,7 @@
     "outDir": "./dist",
     "rootDir": "./",
     "esModuleInterop": true,
-    "lib": [
-      "ES2021",
-      "dom"
-    ]
+    "lib": ["ES2021", "dom"]
   },
-  "include": [
-    "src/scripts/*.ts",
-    "src/vite-env.d.ts"
-  ]
+  "include": ["src/scripts/*.ts", "src/vite-env.d.ts"]
 }

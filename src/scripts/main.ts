@@ -1,36 +1,27 @@
-import {initImageBackgroundColorInput} from "./components/imageBackgroundColorInput"
-import {initTierSettingsRows} from "./components/tierSettingsRow"
-import {initSettingsModal} from "./components/settingsModal"
-import {initNewTierInput} from "./components/newTierInput"
-import {initTierRows} from "./components/tierRow"
-import {initFooter} from "./components/footer"
+import { initImageBackgroundColorInput } from './components/imageBackgroundColorInput'
+import { createTierSettingsRowElement } from './components/tierSettingsRow'
+import { initDraggingComponents } from './components/dragging'
+import { initSettingsModal } from './components/settingsModal'
+import { initNewTierInput } from './components/newTierInput'
+import { initExportButton } from './components/exportButton'
+import { createTierRowElement } from './components/tierRow'
+import { initFooter } from './components/footer'
 
-import {initDragging} from "./dragging"
-import {initExport} from "./export"
-import {tierState} from "./state"
+import { addTier } from './state/tier'
 
-const tiers = [
-    {id: crypto.randomUUID(), label: "S", hexColor: "#fe7f7f"},
-    {id: crypto.randomUUID(), label: "A", hexColor: "#FFBF7F"},
-    {id: crypto.randomUUID(), label: "B", hexColor: "#FEDF81"},
-    {id: crypto.randomUUID(), label: "C", hexColor: "#FEFE7F"},
-    {id: crypto.randomUUID(), label: "D", hexColor: "#BEFF7E"},
-    {id: crypto.randomUUID(), label: "E", hexColor: "#7EFE7F"}
-]
+import { initialTierData } from './constants'
 
-initDragging()
-initExport()
+// Initialize components
 
-// TODO:
-// Event delegation (for draggable elements) - performance and scalability
-
-initFooter()
 initImageBackgroundColorInput()
+initDraggingComponents()
 initSettingsModal()
 initNewTierInput()
-initTierRows()
-initTierSettingsRows()
+initExportButton()
+initFooter()
 
-tiers.forEach((tier) => {
-    tierState.add(tier)
+initialTierData.forEach((data) => {
+  const tier = addTier(data)
+  createTierRowElement(tier)
+  createTierSettingsRowElement(tier)
 })
