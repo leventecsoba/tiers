@@ -1,4 +1,5 @@
-This project is a lightweight, fully customizable tier list maker built with vanilla TypeScript.
+This project is a lightweight, fully customizable tier list maker built with vanilla TypeScript. Check it out
+at https://leventecsoba.github.io/tiers/
 
 ### Features & Usage
 
